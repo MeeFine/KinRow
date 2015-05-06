@@ -1,3 +1,5 @@
+import time
+import random
 initial_state = []
 k = 0
 side = ''
@@ -24,12 +26,23 @@ def introduce():
 def nickname():
     return "Shintou Hikaru"
 
+def minimax(board, whichSide, playLeft):
 
 def makeMove(CurrentState, currentRemark, timeLimit=10000):
+    currentSide = CurrentState[1]
 
     result = [[], ]
     return result
 
 
 def staticEval(state):
+    board = state[0]
+    result = 0
+    numberRow = len(board)
+    numberCol = len(board[0])
+    for i in range(numberRow):
+
+
+
+
 
