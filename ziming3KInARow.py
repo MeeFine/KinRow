@@ -1,4 +1,3 @@
-__author__ = 'ziming3'
 initial_state = []
 k = 0
 side = ''
@@ -17,7 +16,8 @@ def introduce():
     Hi, My name is Shintou Hikaru, I am a sim Go player.
     I am from anime "Hikaru no go", I am very good at Go,
     and I am certainly sure I will be good at K-In-a-Row game.
-    My creator is Ziming Guo, UWNetID: 1238851
+    My creators are Ziming Guo, UWNetID: ziming3
+    and Weiyou Dai, UWNetID: weiyou16
     '''
 
 
@@ -30,3 +30,4 @@ def makeMove(CurrentState, currentRemark, timeLimit=10000):
 
 
 def staticEval(state):
+
