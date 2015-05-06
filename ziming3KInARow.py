@@ -67,6 +67,7 @@ def minimax(board, whichSide, playLeft):
 
 def makeMove(CurrentState, currentRemark, timeLimit=10000):
     currentSide = CurrentState[1]
+    uttererance = ""
 
     result = [[], ]
     return result
