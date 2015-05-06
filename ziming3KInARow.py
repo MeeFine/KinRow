@@ -9,7 +9,6 @@ side = ''
 opponent = ''
 zobristnum = []
 def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
-    global zobristnum
     glob = globals()
     glob['k'] = k
     glob['side'] = what_side_I_play
@@ -27,13 +26,12 @@ def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
 
 
 def zinit():
-    global zobristnum, hi, wi, forbid
+    global zobristnum, hi, wi
     zobristnum = [[[0] * 2] * wi] * hi
     for i in range(hi):
         for j in range(wi):
-            if (i, j) not in forbid:
-                for k in range(2):
-                    zobristnum[i][j][k] = randint(0, 4294967296)
+            for k in range(2):
+                zobristnum[i][j][k] = randint(0, 4294967296)
 
 
 def zhash(board):
@@ -63,7 +61,10 @@ def introduce():
 def nickname():
     return "Shintou Hikaru"
 
+
 def minimax(board, whichSide, playLeft):
+
+
 
 def makeMove(CurrentState, currentRemark, timeLimit=10000):
     currentSide = CurrentState[1]
