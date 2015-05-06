@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5af47818-024e-462d-8038-7d1224f5b930" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ziming3KInARow.py" afterPath="$PROJECT_DIR$/ziming3KInARow.py" />
     </list>
     <ignored path="KinRow.iws" />
@@ -30,11 +29,11 @@
       <file leaf-file-name="ziming3KInARow.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ziming3KInARow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3820598" vertical-offset="0" max-vertical-offset="990">
-              <caret line="23" column="26" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
+            <state vertical-scroll-proportion="0.56478405" vertical-offset="0" max-vertical-offset="1035">
+              <caret line="34" column="29" selection-start-line="34" selection-start-column="29" selection-end-line="34" selection-end-column="29" />
               <folding>
-                <element signature="e#1016#1299#0" expanded="false" />
-                <element signature="e#1322#1345#0" expanded="false" />
+                <element signature="e#1241#1524#0" expanded="false" />
+                <element signature="e#1547#1570#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -83,8 +82,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="112" />
-    <option name="y" value="221" />
+    <option name="x" value="-216" />
+    <option name="y" value="229" />
     <option name="width" value="1400" />
     <option name="height" value="1000" />
   </component>
@@ -280,7 +279,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="112" y="221" width="1400" height="1000" extended-state="0" />
+    <frame x="-216" y="229" width="1400" height="1000" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -353,11 +352,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ziming3KInARow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3820598" vertical-offset="0" max-vertical-offset="990">
-          <caret line="23" column="26" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.56478405" vertical-offset="0" max-vertical-offset="1035">
+          <caret line="34" column="29" selection-start-line="34" selection-start-column="29" selection-end-line="34" selection-end-column="29" />
           <folding>
-            <element signature="e#1016#1299#0" expanded="false" />
-            <element signature="e#1322#1345#0" expanded="false" />
+            <element signature="e#1241#1524#0" expanded="false" />
+            <element signature="e#1547#1570#0" expanded="false" />
           </folding>
         </state>
       </provider>
