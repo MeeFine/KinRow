@@ -27,6 +27,8 @@ def nickname():
 
 def makeMove(CurrentState, currentRemark, timeLimit=10000):
 
+    result = [[], ]
+    return result
 
 
 def staticEval(state):
