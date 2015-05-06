@@ -10,6 +10,7 @@ def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
     glob['side'] = what_side_I_play
     glob['opponent'] = opponent_nick_name
 
+    return "OK"
 
 def introduce():
     return '''
