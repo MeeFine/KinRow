@@ -13,9 +13,8 @@ rows = []
 cols = []
 lslant = []
 rslant = []
-winRemarkList = ["I win, you lose", "Let's have another round", "Don't give up. Try Again."]
-prewinRemarkList = ["Attentation! I am going to win.", "Be Cautious!", "Do think twice before you move"]
-normalRemarkList = ["I still need more practice. ", "I can beat you. ", "I will never give up. ", "If I lose, I will come back. "]
+
+
 def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
     glob = globals()
     glob['k'] = k
@@ -114,14 +113,15 @@ def successors(state, whoseMove):
     return stateList
 
 
-def minimax(state, whichSide, timeLimit, timeStart, playLeft):
-    if (time.time() - timeStart >= timeLimit * 0.9): return [staticEval(state), state]
+def minimax(state, timeLimit, timeStart, playLeft):
+    if (time.time() - timeStart >= timeLimit * 0.7): return [staticEval(state), state]
     nextState = []
+    whichSide = state[1]
     if (playLeft == 0): return [staticEval(state), state]
     if whichSide == side: provisional = -900000000
     else: provisional = 900000000
     for everyState in successors(state, whichSide):
-        everyResult = minimax(everyState, other(whichSide), timeLimit, timeStart, playLeft - 1)
+        everyResult = minimax(everyState, timeLimit, timeStart, playLeft - 1)
         newVal = everyResult[0]
         if (whichSide == side and newVal > provisional) or (whichSide == other(side) and newVal < provisional):
             provisional = newVal
@@ -130,10 +130,17 @@ def minimax(state, whichSide, timeLimit, timeStart, playLeft):
 
 
 def makeMove(CurrentState, currentRemark, timeLimit=10000):
+    winRemarkList = ["I win, you lose", "Let's have another round", "Don't give up. Try Again."]
+    prewinRemarkList = ["Attentation! I am going to win.", "Be Cautious!", "Do think twice before you move"]
+    normalRemarkList = ["I still need more practice. ", "I can beat you. ", "I will never give up. ", "If I lose, I will come back. "]
+
     timeWhenStart = time.time()
-    values = minimax(CurrentState, CurrentState[1], timeLimit, timeWhenStart, 2)
+    values = minimax(CurrentState, timeLimit, timeWhenStart, 2)
     newState = values[1]
     score = values[0]
+    addedrow = 0
+    addedcol = 0
+    newRemark = ""
     if (score > 950):
         newRemark = choice(winRemarkList)
     elif (score > 800 and score <= 950):
