@@ -12,7 +12,9 @@ rows = []
 cols = []
 lslant = []
 rslant = []
-
+winRemarkList = ["I win, you lose", "Let's have another round", "Don't give up. Try Again."]
+prewinRemarkList = ["Attentation! I am going to win.", "Be Cautious!", "Do think twice before you move"]
+normalRemarkList = ["I still need more practice. ", "I can beat you. ", "I will never give up. ", "If I lose, I will come back. "]
 def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
     glob = globals()
     glob['k'] = k
@@ -116,11 +118,21 @@ def minimax(state, whichSide, min, max, timeStart, playLeft):
                 stateNew = everyState
     return [provisional, stateNew]
 
+
 def makeMove(CurrentState, currentRemark, timeLimit=10000):
-    currentSide = CurrentState[1]
+    timeWhenStart = time.time()
+    values = minimax(CurrentState, CurrentState[1], timeWhenStart, playLeft)
+    newState = values[1]
+    score = values[0]
+    if (score > 950):
+        newRemark = random.choice(winRemarkList)
+    elif (score > 800 and score <= 950):
+        newRemark = random.choice(prewinRemarkList)
+    elif (score <= 800 and score > 100):
+        newRemark = random.choice(normalRemarkList)
     uttererance = ""
 
-    result = [[], ]
+    result = [[move, newState], newRemark]
     return result
 
 
