@@ -104,8 +104,8 @@ def nickname():
 def successors(state):
     board = state[0]
     stateList = []
-    for Rows in len(board):
-        for Cols in len(board[0]):
+    for Rows in range(hi):
+        for Cols in range(wi):
             if board[Rows][Cols] == ' ':
                 tempBoard = copy.deepcopy(board)
                 tempBoard[Rows][Cols] = state[1]
@@ -162,7 +162,7 @@ def staticEval(state):
     for i in cols:
         col = []
         for j in range(hi):
-            col.append(board[j, i[1]])
+            col.append(board[j][i[1]])
         count(col, mine, oppo)
     for i in lslant:
         diag = []
