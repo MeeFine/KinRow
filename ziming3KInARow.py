@@ -45,7 +45,12 @@ def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
                 rslant.append(i, l)
     return "OK"
 
-
+def other(thisSide):
+    if thisSide == 'X':
+        return 'O'
+    else:
+        return 'X'
+        
 def zinit():
     global zobristnum, hi, wi
     zobristnum = [[[0] * 2] * wi] * hi
@@ -84,7 +89,9 @@ def nickname():
 
 
 def minimax(board, whichSide, playLeft):
-
+    for successors in range():
+        return ''
+    return provisional
 
 
 def makeMove(CurrentState, currentRemark, timeLimit=10000):
