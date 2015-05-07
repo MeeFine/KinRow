@@ -128,33 +128,63 @@ def staticEval(state):
     global hi, wi, side, k, rows, cols, lslant, rslant
     board = state[0]
     score = 0
-    check = False
-    cur = 0
     mine = [0] * k
     oppo = [0] * k
     for i in rows:
         row = board[i[0]]
-        mycount = 0
-        opcount = 0
-        maxmine = 0
-        maxoppo = 0
-        for j in range(wi):
-            if row[j] == side:
-                mycount += 1
-                if maxoppo < opcount:
-                    maxoppo = opcount
-                opcount = 0
-            else:
-                opcount += 1
-                if maxmine < mycount:
-                    maxmine = mycount
-                mycount = 0
+        temp = count(row, side)
+        mine[temp[0]] += 1
+        oppo[temp[1]] += 1
+    for i in cols:
+        col = []
+        for j in range(hi):
+            col.append(board[j, i[1]])
+        temp = count(col, side)
+        mine[temp[0]] += 1
+        oppo[temp[1]] += 1
+    for i in lslant:
+        diag = []
+        while True:
+            try:
+                diag.append(board[i[0]+1][i[1]+1])
+            except:
+                break
+        temp = count(col, side)
+        mine[temp[0]] += 1
+        oppo[temp[1]] += 1
+    for i in rslant:
+        diag = []
+        while True:
+            try:
+                diag.append(board[i[0]+1][i[1]-1])
+            except:
+                break
+        temp = count(col, side)
+        mine[temp[0]] += 1
+        oppo[temp[1]] += 1
+    for i in range(k):
+        score += 10 ** i * (mine[i] - oppo[i])
+    return score
 
 
 def count(list, side):
-    first = list.index(side)
     opp = other(side)
-
+    mycount = 0
+    opcount = 0
+    maxmine = 0
+    maxoppo = 0
+    for j in range(len(list)):
+        if list[j] == side:
+            mycount += 1
+            if maxoppo < opcount:
+                maxoppo = opcount
+            opcount = 0
+        elif list[j] == opp:
+            opcount += 1
+            if maxmine < mycount:
+                maxmine = mycount
+            mycount = 0
+    return (maxmine, maxoppo)
 
 
 def other(side):
