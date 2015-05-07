@@ -99,18 +99,30 @@ def introduce():
 
 def nickname():
     return "Shindou Hikaru"
+    
+def successors(state):
+    board = state[0]
+    stateList = []
+    for Rows in len(board):
+        for Cols in len(board[0]):
+            if board[Rows][Cols] == ' ':
+                tempBoard = copy.deepcopy(board)
+                tempBoard[Rows][Cols] = state[1]
+                newState = [tempBoard, other(state[1])]
+                stateList.append(newState)
+    return stateList
 
 
 def minimax(state, whichSide, min, max, timeStart, playLeft):
     if whichSide == 'X':
-        for everyState in successor(state):
+        for everyState in successors(state):
             everyResult = minimax(everyState, other(whichSide), min, max, timeStart, playLeft)
             newVal = everyResult[0]
             if newVal > provisional:
                 provisional = newVal
                 stateNew = everyState
     else:
-        for everyState in successor(state):
+        for everyState in successors(state):
             everyResult = minimax(everyState, other(whichSide), min, max, timeStart, playLeft)
             newVal = everyResult[0]
             if newVal < provisional:
