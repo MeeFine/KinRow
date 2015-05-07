@@ -13,10 +13,6 @@ rows = []
 cols = []
 lslant = []
 rslant = []
-row = []
-col = []
-ldiag = []
-rdiag = []
 
 def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
     glob = globals()
@@ -34,24 +30,11 @@ def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
     zinit()
     if k <= wi:
         for i in range(hi):
-            '''
-            for l in range(wi - k + 1):
-                rows.append((i, l))'''
             rows.append((i, 0))
     if k <= hi:
         for i in range(wi):
-            '''
-            for l in range(hi - k + 1):
-                cols.append((l, i))'''
             cols.append((0, i))
     if k <= wi and k <= hi:
-        '''
-        for i in range(hi - k + 1):
-            for l in range(wi - k + 1):
-                lslant.append(i, l)
-        for i in range(hi - k + 1):
-            for l in range(wi - k, wi):
-                rslant.append(i, l)'''
         for i in range(hi - k + 1):
             lslant.append((i, 0))
             rslant.append((i, wi - 1))
@@ -59,38 +42,8 @@ def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
             lslant.append((0, i))
         for i in range(wi - k, wi):
             rslant.append((0, i))
-
-    for i in rows:
-        row = board[i[0]]
-    for i in cols:
-        col = []
-        for j in range(hi):
-            col.append(board[j][i[1]])
-    count = 0
-    for i in lslant:
-        ldiag = []
-        while True:
-            try:
-                ldiag.append(board[i[0]+count][i[1]+count])
-                count += 1
-            except:
-                break
-    count = 0
-    for i in rslant:
-        rdiag = []
-        while True:
-            try:
-                rdiag.append(board[i[0]+count][i[1]-count])
-                count += 1
-            except:
-                break
     return "OK"
 
-def other(thisSide):
-    if thisSide == 'X':
-        return 'O'
-    else:
-        return 'X'
 
 def zinit():
     global zobristnum, hi, wi
@@ -128,6 +81,7 @@ def introduce():
 def nickname():
     return "Shindou Hikaru"
 
+
 def successors(state, whoseMove):
     board = state[0]
     stateList = []
@@ -142,7 +96,7 @@ def successors(state, whoseMove):
 
 
 def minimax(state, timeLimit, timeStart, playLeft):
-    if (time.time() - timeStart >= timeLimit * 0.7): return [staticEval(state), state]
+    if time.time() - timeStart >= timeLimit * 0.7: return [staticEval(state), state]
     nextState = []
     whichSide = state[1]
     if (playLeft == 0): return [staticEval(state), state]
@@ -196,10 +150,34 @@ def staticEval(state):
     score = 0
     mine = [0] * k
     oppo = [0] * k
-    count(row, mine, oppo)
-    count(col, mine, oppo)
-    count(ldiag, mine, oppo)
-    count(rdiag, mine, oppo)
+    for i in rows:
+        row = board[i[0]]
+        count(row, mine, oppo)
+    for i in cols:
+        col = []
+        for j in range(hi):
+            col.append(board[j][i[1]])
+        count(col, mine, oppo)
+    temp = 0
+    for i in lslant:
+        ldiag = []
+        while True:
+            try:
+                ldiag.append(board[i[0]+temp][i[1]+temp])
+                temp += 1
+            except:
+                break
+        count(ldiag, mine, oppo)
+    temp = 0
+    for i in rslant:
+        rdiag = []
+        while True:
+            try:
+                rdiag.append(board[i[0]+temp][i[1]-temp])
+                temp += 1
+            except:
+                break
+        count(rdiag, mine, oppo)
     for i in range(k):
         score += 10 ** i * (mine[i] - oppo[i])
     return score
@@ -222,16 +200,14 @@ def count(list, mine, oppo):
             if maxmine < mycount:
                 maxmine = mycount
             mycount = 0
-    for i in range(maxmine):
-        mine[i] += 1
-    for i in range(maxoppo):
-        oppo[i] += 1
+    mine[maxmine] += 1
+    oppo[maxoppo] += 1
 
 
-def other(side):
-    if side == "X":
+def other(which_side):
+    if which_side == "X":
         return "O"
-    elif side == "O":
+    elif which_side == "O":
         return "X"
     else:
         raise Exception("Illegal argument for function other()")
