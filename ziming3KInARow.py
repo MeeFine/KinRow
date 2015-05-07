@@ -13,9 +13,7 @@ rows = []
 cols = []
 lslant = []
 rslant = []
-winRemarkList = ["I win, you lose", "Let's have another round", "Don't give up. Try Again."]
-prewinRemarkList = ["Attentation! I am going to win.", "Be Cautious!", "Do think twice before you move"]
-normalRemarkList = ["I still need more practice. ", "I can beat you. ", "I will never give up. ", "If I lose, I will come back. "]
+
 def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
     glob = globals()
     glob['k'] = k
@@ -32,24 +30,11 @@ def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
     zinit()
     if k <= wi:
         for i in range(hi):
-            '''
-            for l in range(wi - k + 1):
-                rows.append((i, l))'''
             rows.append((i, 0))
     if k <= hi:
         for i in range(wi):
-            '''
-            for l in range(hi - k + 1):
-                cols.append((l, i))'''
             cols.append((0, i))
     if k <= wi and k <= hi:
-        '''
-        for i in range(hi - k + 1):
-            for l in range(wi - k + 1):
-                lslant.append(i, l)
-        for i in range(hi - k + 1):
-            for l in range(wi - k, wi):
-                rslant.append(i, l)'''
         for i in range(hi - k + 1):
             lslant.append((i, 0))
             rslant.append((i, wi - 1))
@@ -59,12 +44,7 @@ def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
             rslant.append((0, i))
     return "OK"
 
-def other(thisSide):
-    if thisSide == 'X':
-        return 'O'
-    else:
-        return 'X'
-        
+
 def zinit():
     global zobristnum, hi, wi
     zobristnum = [[[0] * 2] * wi] * hi
@@ -100,53 +80,66 @@ def introduce():
 
 def nickname():
     return "Shindou Hikaru"
-    
-def successors(state):
+
+
+def successors(state, whoseMove):
     board = state[0]
     stateList = []
     for Rows in range(hi):
         for Cols in range(wi):
             if board[Rows][Cols] == ' ':
                 tempBoard = copy.deepcopy(board)
-                tempBoard[Rows][Cols] = state[1]
-                newState = [tempBoard, other(state[1])]
+                tempBoard[Rows][Cols] = whoseMove
+                newState = [tempBoard, other(whoseMove)]
                 stateList.append(newState)
     return stateList
 
 
-def minimax(state, whichSide, min, max, timeLimit, timeStart, playLeft):
-    #if (playLeft == 0): return [staticEval(state), state]
-    if (time.time() - timeStart >= timeLimit * 0.9): return [staticEval(state), state]
-    if whichSide == side:
-        for everyState in successors(state):
-            everyResult = minimax(everyState, other(whichSide), min, max, timeLimit, timeStart, playLeft - 1)
-            newVal = everyResult[0]
-            if newVal > max:
-                provisional = newVal
-                stateNew = everyState
-    else:
-        for everyState in successors(state):
-            everyResult = minimax(everyState, other(whichSide), min, max, timeLimit, timeStart, playLeft - 1)
-            newVal = everyResult[0]
-            if newVal < min:
-                provisional = newVal
-                stateNew = everyState
-    return [provisional, stateNew]
+def minimax(state, timeLimit, timeStart, playLeft):
+    if time.time() - timeStart >= timeLimit * 0.7: return [staticEval(state), state]
+    nextState = []
+    whichSide = state[1]
+    if (playLeft == 0): return [staticEval(state), state]
+    if whichSide == side: provisional = -900000000
+    else: provisional = 900000000
+    for everyState in successors(state, whichSide):
+        everyResult = minimax(everyState, timeLimit, timeStart, playLeft - 1)
+        newVal = everyResult[0]
+        if (whichSide == side and newVal > provisional) or (whichSide == other(side) and newVal < provisional):
+            provisional = newVal
+            nextState = everyState
+    return [provisional, nextState]
 
 
 def makeMove(CurrentState, currentRemark, timeLimit=10000):
+    winRemarkList = ["I win, you lose", "Let's have another round", "Don't give up. Try Again."]
+    prewinRemarkList = ["Attentation! I am going to win.", "Be Cautious!", "Do think twice before you move"]
+    normalRemarkList = ["I still need more practice. ", "I can beat you. ", "I will never give up. ", "If I lose, I will come back. "]
+
     timeWhenStart = time.time()
-    values = minimax(CurrentState, CurrentState[1], -900000000, 900000000, timeLimit, timeWhenStart, 2)
+    values = minimax(CurrentState, timeLimit, timeWhenStart, 2)
     newState = values[1]
     score = values[0]
-    if (score > 950):
+    addedrow = 0
+    addedcol = 0
+    newRemark = ""
+    if score > 950:
         newRemark = choice(winRemarkList)
-    elif (score > 800 and score <= 950):
+    elif score > 800 and score <= 950:
         newRemark = choice(prewinRemarkList)
-    elif (score <= 800 and score > 100):
+    elif score <= 800 and score > 0:
         newRemark = choice(normalRemarkList)
     uttererance = ""
-    move = "OK"
+    for row in range(hi):
+        for col in range(wi):
+            if CurrentState[0][row][col] != newState[0][row][col]:
+                addedrow = row
+                addedcol = col
+                break
+        else:
+            continue
+        break
+    move = (addedrow, addedcol)
     result = [[move, newState], newRemark]
     return result
 
@@ -165,22 +158,26 @@ def staticEval(state):
         for j in range(hi):
             col.append(board[j][i[1]])
         count(col, mine, oppo)
+    temp = 0
     for i in lslant:
-        diag = []
+        ldiag = []
         while True:
             try:
-                diag.append(board[i[0]+1][i[1]+1])
+                ldiag.append(board[i[0]+temp][i[1]+temp])
+                temp += 1
             except:
                 break
-        count(diag, mine, oppo)
+        count(ldiag, mine, oppo)
+    temp = 0
     for i in rslant:
-        diag = []
+        rdiag = []
         while True:
             try:
-                diag.append(board[i[0]+1][i[1]-1])
+                rdiag.append(board[i[0]+temp][i[1]-temp])
+                temp += 1
             except:
                 break
-        count(diag, mine, oppo)
+        count(rdiag, mine, oppo)
     for i in range(k):
         score += 10 ** i * (mine[i] - oppo[i])
     return score
@@ -203,16 +200,14 @@ def count(list, mine, oppo):
             if maxmine < mycount:
                 maxmine = mycount
             mycount = 0
-    for i in range(maxmine):
-        mine[i] += 1
-    for i in range(maxoppo):
-        oppo[i] += 1
+    mine[maxmine - 1] += 1
+    oppo[maxoppo - 1] += 1
 
 
-def other(side):
-    if side == "X":
+def other(which_side):
+    if which_side == "X":
         return "O"
-    elif side == "O":
+    elif which_side == "O":
         return "X"
     else:
         raise Exception("Illegal argument for function other()")
