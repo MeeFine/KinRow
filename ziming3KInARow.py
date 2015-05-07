@@ -13,7 +13,6 @@ cols = []
 lslant = []
 rslant = []
 
-
 def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
     glob = globals()
     glob['k'] = k
@@ -30,19 +29,31 @@ def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
     zinit()
     if k <= wi:
         for i in range(hi):
+            '''
             for l in range(wi - k + 1):
-                rows.append((i, l))
+                rows.append((i, l))'''
+            rows.append((i, 0))
     if k <= hi:
         for i in range(wi):
+            '''
             for l in range(hi - k + 1):
-                cols.append((l, i))
+                cols.append((l, i))'''
+            cols.append((0, i))
     if k <= wi and k <= hi:
+        '''
         for i in range(hi - k + 1):
             for l in range(wi - k + 1):
                 lslant.append(i, l)
         for i in range(hi - k + 1):
             for l in range(wi - k, wi):
-                rslant.append(i, l)
+                rslant.append(i, l)'''
+        for i in range(hi - k + 1):
+            lslant.append((i, 0))
+            rslant.append((i, wi - 1))
+        for i in range(wi - k + 1):
+            lslant.append((0, i))
+        for i in range(wi - k, wi):
+            rslant.append((0, i))
     return "OK"
 
 
@@ -104,12 +115,22 @@ def staticEval(state):
     mine = [0] * k
     oppo = [0] * k
     for i in rows:
-        temp = []
-        temprow = i[0]
-        tempcol = i[1]
-        for j in range(k):
-            temp.append(board[temprow + j][tempcol + j])
-        firstx = temp.index(side)
+        row = board[i[0]]
+        mycount = 0
+        opcount = 0
+        maxmine = 0
+        maxoppo = 0
+        for j in range(wi):
+            if row[j] == side:
+                mycount += 1
+                if maxoppo < opcount:
+                    maxoppo = opcount
+                opcount = 0
+            else:
+                opcount += 1
+                if maxmine < mycount:
+                    maxmine = mycount
+                mycount = 0
 
 
 def count(list, side):
@@ -124,4 +145,4 @@ def other(side):
     elif side == "O":
         return "X"
     else:
-        raise Exception("Illegal argument for other function")
+        raise Exception("Illegal argument for function other()")
