@@ -115,19 +115,20 @@ def successors(state):
 
 
 def minimax(state, whichSide, min, max, timeLimit, timeStart, playLeft):
-
-    if whichSide == 'X':
+    #if (playLeft == 0): return [staticEval(state), state]
+    if (time.time() - timeStart >= timeLimit * 0.9): return [staticEval(state), state]
+    if whichSide == side:
         for everyState in successors(state):
-            everyResult = minimax(everyState, other(whichSide), min, max, timeLimit, timeStart, playLeft)
+            everyResult = minimax(everyState, other(whichSide), min, max, timeLimit, timeStart, playLeft - 1)
             newVal = everyResult[0]
-            if newVal > provisional:
+            if newVal > max:
                 provisional = newVal
                 stateNew = everyState
     else:
         for everyState in successors(state):
-            everyResult = minimax(everyState, other(whichSide), min, max, timeLimit, timeStart, playLeft)
+            everyResult = minimax(everyState, other(whichSide), min, max, timeLimit, timeStart, playLeft - 1)
             newVal = everyResult[0]
-            if newVal < provisional:
+            if newVal < min:
                 provisional = newVal
                 stateNew = everyState
     return [provisional, stateNew]
@@ -135,7 +136,7 @@ def minimax(state, whichSide, min, max, timeLimit, timeStart, playLeft):
 
 def makeMove(CurrentState, currentRemark, timeLimit=10000):
     timeWhenStart = time.time()
-    values = minimax(CurrentState, CurrentState[1], -900000000, 900000000, timeLimit, timeWhenStart, 3)
+    values = minimax(CurrentState, CurrentState[1], -900000000, 900000000, timeLimit, timeWhenStart, 2)
     newState = values[1]
     score = values[0]
     if (score > 950):
