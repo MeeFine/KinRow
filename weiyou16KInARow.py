@@ -200,8 +200,8 @@ def count(list, mine, oppo):
             if maxmine < mycount:
                 maxmine = mycount
             mycount = 0
-    mine[maxmine] += 1
-    oppo[maxoppo] += 1
+    mine[maxmine - 1] += 1
+    oppo[maxoppo - 1] += 1
 
 
 def other(which_side):
