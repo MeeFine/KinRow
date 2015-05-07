@@ -13,7 +13,10 @@ rows = []
 cols = []
 lslant = []
 rslant = []
-
+row = []
+col = []
+ldiag = []
+rdiag = []
 
 def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
     glob = globals()
@@ -56,6 +59,31 @@ def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
             lslant.append((0, i))
         for i in range(wi - k, wi):
             rslant.append((0, i))
+
+    for i in rows:
+        row = board[i[0]]
+    for i in cols:
+        col = []
+        for j in range(hi):
+            col.append(board[j][i[1]])
+    count = 0
+    for i in lslant:
+        ldiag = []
+        while True:
+            try:
+                ldiag.append(board[i[0]+count][i[1]+count])
+                count += 1
+            except:
+                break
+    count = 0
+    for i in rslant:
+        rdiag = []
+        while True:
+            try:
+                rdiag.append(board[i[0]+count][i[1]-count])
+                count += 1
+            except:
+                break
     return "OK"
 
 def other(thisSide):
@@ -145,7 +173,7 @@ def makeMove(CurrentState, currentRemark, timeLimit=10000):
         newRemark = choice(winRemarkList)
     elif (score > 800 and score <= 950):
         newRemark = choice(prewinRemarkList)
-    elif (score <= 800 and score > 100):
+    elif (score <= 800 and score > 0):
         newRemark = choice(normalRemarkList)
     uttererance = ""
     for row in range(hi):
@@ -157,7 +185,7 @@ def makeMove(CurrentState, currentRemark, timeLimit=10000):
         else:
             continue
         break
-    move = "At (" + str(addedrow) + ", " + str(addedcol) + ") place an " + side
+    move = (addedrow, addedcol)
     result = [[move, newState], newRemark]
     return result
 
@@ -168,30 +196,10 @@ def staticEval(state):
     score = 0
     mine = [0] * k
     oppo = [0] * k
-    for i in rows:
-        row = board[i[0]]
-        count(row, mine, oppo)
-    for i in cols:
-        col = []
-        for j in range(hi):
-            col.append(board[j][i[1]])
-        count(col, mine, oppo)
-    for i in lslant:
-        diag = []
-        while True:
-            try:
-                diag.append(board[i[0]+1][i[1]+1])
-            except:
-                break
-        count(diag, mine, oppo)
-    for i in rslant:
-        diag = []
-        while True:
-            try:
-                diag.append(board[i[0]+1][i[1]-1])
-            except:
-                break
-        count(diag, mine, oppo)
+    count(row, mine, oppo)
+    count(col, mine, oppo)
+    count(ldiag, mine, oppo)
+    count(rdiag, mine, oppo)
     for i in range(k):
         score += 10 ** i * (mine[i] - oppo[i])
     return score
