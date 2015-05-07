@@ -99,11 +99,22 @@ def nickname():
     return "Shintou Hikaru"
 
 
-def minimax(board, whichSide, playLeft):
-    for successors in range():
-        return ''
-    return provisional
-
+def minimax(state, whichSide, min, max, timeStart, playLeft):
+    if whichSide == 'X':
+        for everyState in successor(state):
+            everyResult = minimax(everyState, other(whichSide), min, max, timeStart, playLeft)
+            newVal = everyResult[0]
+            if newVal > provisional:
+                provisional = newVal
+                stateNew = everyState
+    else:
+        for everyState in successor(state):
+            everyResult = minimax(everyState, other(whichSide), min, max, timeStart, playLeft)
+            newVal = everyResult[0]
+            if newVal < provisional:
+                provisional = newVal
+                stateNew = everyState
+    return [provisional, stateNew]
 
 def makeMove(CurrentState, currentRemark, timeLimit=10000):
     currentSide = CurrentState[1]
