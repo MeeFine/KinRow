@@ -8,13 +8,19 @@ k = 0
 side = ''
 opponent = ''
 zobristnum = []
+rows = []
+cols = []
+lslant = []
+rslant = []
+
+
 def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
     glob = globals()
     glob['k'] = k
     glob['side'] = what_side_I_play
     glob['opponent'] = opponent_nick_name
     board = initial_state[0]
-    global hi, wi, forbid
+    global hi, wi, forbid, rows, cols, lslant, rslant
     hi = len(board)
     wi = len(board[0])
     for i in range(hi):
@@ -22,6 +28,21 @@ def prepare(initial_state, k, what_side_I_play, opponent_nick_name):
             if i == "-":
                 forbid.append((i, j))
     zinit()
+    if k <= wi:
+        for i in range(hi):
+            for l in range(wi - k + 1):
+                rows.append((i, l))
+    if k <= hi:
+        for i in range(wi):
+            for l in range(hi - k + 1):
+                cols.append((l, i))
+    if k <= wi and k <= hi:
+        for i in range(hi - k + 1):
+            for l in range(wi - k + 1):
+                lslant.append(i, l)
+        for i in range(hi - k + 1):
+            for l in range(wi - k, wi):
+                rslant.append(i, l)
     return "OK"
 
 
@@ -75,13 +96,32 @@ def makeMove(CurrentState, currentRemark, timeLimit=10000):
 
 
 def staticEval(state):
+    global hi, wi, side, k, rows, cols, lslant, rslant
     board = state[0]
-    result = 0
-    numberRow = len(board)
-    numberCol = len(board[0])
-    for i in range(numberRow):
+    score = 0
+    check = False
+    cur = 0
+    mine = [0] * k
+    oppo = [0] * k
+    for i in rows:
+        temp = []
+        temprow = i[0]
+        tempcol = i[1]
+        for j in range(k):
+            temp.append(board[temprow + j][tempcol + j])
+        firstx = temp.index(side)
+
+
+def count(list, side):
+    first = list.index(side)
+    opp = other(side)
 
 
 
-
-
+def other(side):
+    if side == "X":
+        return "O"
+    elif side == "O":
+        return "X"
+    else:
+        raise Exception("Illegal argument for other function")
