@@ -87,7 +87,7 @@ def zhash(board):
 
 def introduce():
     return '''
-    Hi, My name is Shintou Hikaru, I am a sim Go player.
+    Hi, My name is Shindou Hikaru, I am a sim Go player.
     I am from anime "Hikaru no go", I am very good at Go,
     and I am certainly sure I will be good at K-In-a-Row game.
     My creators are Ziming Guo, UWNetID: ziming3
@@ -96,7 +96,7 @@ def introduce():
 
 
 def nickname():
-    return "Shintou Hikaru"
+    return "Shindou Hikaru"
 
 
 def minimax(state, whichSide, min, max, timeStart, playLeft):
@@ -132,16 +132,12 @@ def staticEval(state):
     oppo = [0] * k
     for i in rows:
         row = board[i[0]]
-        temp = count(row, side)
-        mine[temp[0]] += 1
-        oppo[temp[1]] += 1
+        count(row, mine, oppo)
     for i in cols:
         col = []
         for j in range(hi):
             col.append(board[j, i[1]])
-        temp = count(col, side)
-        mine[temp[0]] += 1
-        oppo[temp[1]] += 1
+        count(col, mine, oppo)
     for i in lslant:
         diag = []
         while True:
@@ -149,9 +145,7 @@ def staticEval(state):
                 diag.append(board[i[0]+1][i[1]+1])
             except:
                 break
-        temp = count(col, side)
-        mine[temp[0]] += 1
-        oppo[temp[1]] += 1
+        count(diag, mine, oppo)
     for i in rslant:
         diag = []
         while True:
@@ -159,16 +153,14 @@ def staticEval(state):
                 diag.append(board[i[0]+1][i[1]-1])
             except:
                 break
-        temp = count(col, side)
-        mine[temp[0]] += 1
-        oppo[temp[1]] += 1
+        count(diag, mine, oppo)
     for i in range(k):
         score += 10 ** i * (mine[i] - oppo[i])
     return score
 
 
-def count(list, side):
-    opp = other(side)
+def count(list, mine, oppo):
+    oppside = other(side)
     mycount = 0
     opcount = 0
     maxmine = 0
@@ -179,12 +171,15 @@ def count(list, side):
             if maxoppo < opcount:
                 maxoppo = opcount
             opcount = 0
-        elif list[j] == opp:
+        elif list[j] == oppside:
             opcount += 1
             if maxmine < mycount:
                 maxmine = mycount
             mycount = 0
-    return (maxmine, maxoppo)
+    for i in range(maxmine):
+        mine[i] += 1
+    for i in range(maxoppo):
+        oppo[i] += 1
 
 
 def other(side):
