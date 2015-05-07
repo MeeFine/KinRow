@@ -144,7 +144,7 @@ def makeMove(CurrentState, currentRemark, timeLimit=10000):
     return result
 
 
-def staticEval(state):
+'''def staticEval(state):
     global hi, wi, side, k, rows, cols, lslant, rslant
     board = state[0]
     score = 0
@@ -201,7 +201,85 @@ def count(list, mine, oppo):
                 maxmine = mycount
             mycount = 0
     mine[maxmine] += 1
-    oppo[maxoppo] += 1
+    oppo[maxoppo] += 1'''
+
+def staticEval(state):
+
+  result = 0
+  for num in range(2,k+1):
+    xinarow = search_Board(state[0],'X',num)
+    oinarow = search_Board(state[0],'O',num)
+
+    if num == k and xinarow > 0:
+        return float('inf')
+    elif num == k and oinarow > 0:
+        return float('-inf')
+    else:
+        result += pow(2, num) * xinarow - pow(2, num) * oinarow
+
+  return result
+
+
+def search_Board (board,the_side, num):
+  COL=len(board)
+  ROW=len(board)
+  score = 0
+
+  for row in range(ROW):
+    for col in range(COL):
+      firstDiagonal = [(row+i, col+i) for i in range(num)]
+      secondDiagonal = [(row+i, col-i) for i in range(num)]
+      k_in_a_row_backslash_is_here = True
+      try:
+        for coord in firstDiagonal:
+          if board[coord[0]][coord[1]] != the_side:
+            k_in_a_row_backslash_is_here = False
+        try:
+          if board[coord[0] + 1][coord[1] + 1] == the_side or board[row-1][col-1] == the_side:
+            k_in_a_row_backslash_is_here = False
+        except IndexError:
+          pass
+      except IndexError:
+        k_in_a_row_backslash_is_here = False
+      if k_in_a_row_backslash_is_here:
+        score = score + 1
+      k_in_a_row_forwardslash_is_here = True
+      try:
+        for coord in secondDiagonal:
+          if board[coord[0]][coord[1]] != the_side:
+            k_in_a_row_forwardslash_is_here = False
+        try:
+          if board[coord[0] + 1][coord[1] - 1] == the_side or board[row-1][col+1] == the_side:
+            k_in_a_row_forwardslash_is_here = False
+        except IndexError:
+          pass
+      except IndexError:
+        k_in_a_row_forwardslash_is_here = False
+      if k_in_a_row_forwardslash_is_here:
+        score = score + 1
+
+  for row in range(ROW):
+    for col in range(COL-num+1):
+      if board[row][col]== the_side:
+        flag = True
+        for adjcol in range(col+1,col+num):
+          if board[row][adjcol] != the_side :
+            flag=False
+        if flag and (num==k or ((col+num+1 > COL or board[row][col+num]!=the_side) and (col-1<0 or board[row][col-1]!=the_side))):
+          score = score + 1
+
+  # Vertical
+  for col in range(COL):
+    for row in range(ROW-num+1):
+      if board[row][col] == the_side:
+        flag = True
+        for adjrow in range(row+1,row+num):
+          if board[adjrow][col] != the_side :
+            flag=False
+        if flag and (num==k or (((row+num+1 > ROW or board[row+num][col]!=the_side) and (row-1<0 or board[row-1][col]!=the_side)))):
+          score = score + 1
+
+  return score
 
 
 def other(which_side):
