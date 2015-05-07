@@ -1,5 +1,6 @@
 import time
-from random import randint
+from random import randint, choice
+import copy
 
 hi = 0
 wi = 0
@@ -113,17 +114,18 @@ def successors(state):
     return stateList
 
 
-def minimax(state, whichSide, min, max, timeStart, playLeft):
+def minimax(state, whichSide, min, max, timeLimit, timeStart, playLeft):
+
     if whichSide == 'X':
         for everyState in successors(state):
-            everyResult = minimax(everyState, other(whichSide), min, max, timeStart, playLeft)
+            everyResult = minimax(everyState, other(whichSide), min, max, timeLimit, timeStart, playLeft)
             newVal = everyResult[0]
             if newVal > provisional:
                 provisional = newVal
                 stateNew = everyState
     else:
         for everyState in successors(state):
-            everyResult = minimax(everyState, other(whichSide), min, max, timeStart, playLeft)
+            everyResult = minimax(everyState, other(whichSide), min, max, timeLimit, timeStart, playLeft)
             newVal = everyResult[0]
             if newVal < provisional:
                 provisional = newVal
@@ -133,17 +135,17 @@ def minimax(state, whichSide, min, max, timeStart, playLeft):
 
 def makeMove(CurrentState, currentRemark, timeLimit=10000):
     timeWhenStart = time.time()
-    values = minimax(CurrentState, CurrentState[1], timeWhenStart, playLeft)
+    values = minimax(CurrentState, CurrentState[1], -900000000, 900000000, timeLimit, timeWhenStart, 3)
     newState = values[1]
     score = values[0]
     if (score > 950):
-        newRemark = random.choice(winRemarkList)
+        newRemark = choice(winRemarkList)
     elif (score > 800 and score <= 950):
-        newRemark = random.choice(prewinRemarkList)
+        newRemark = choice(prewinRemarkList)
     elif (score <= 800 and score > 100):
-        newRemark = random.choice(normalRemarkList)
+        newRemark = choice(normalRemarkList)
     uttererance = ""
-
+    move = "OK"
     result = [[move, newState], newRemark]
     return result
 
